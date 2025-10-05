@@ -14,11 +14,6 @@ from mmpose.codecs.utils.gaussian_heatmap import (
 from pathlib import Path
 from mmcv.transforms import Compose
 import matplotlib.pyplot as plt
-import cv2
-
-train_dir = (Path.cwd() / "datasets" / "dog-pose" / "train")
-val_dir = (Path.cwd() / "datasets" / "dog-pose" / "val")
-
 import numpy as np
 from mmcv.transforms import BaseTransform
 from mmpose.registry import TRANSFORMS
@@ -133,6 +128,3 @@ class VitPoseDataset(Dataset):
             results = {**processed}
         results["heatmaps_gt"] = heatmaps[0]
         return results
-
-train_dataset = VitPoseDataset(train_dir = train_dir, augment = True)
-val_dataset = VitPoseDataset(train_dir = val_dir)        
