@@ -1,6 +1,5 @@
 from torch.utils.data import Dataset
 from PIL import Image
-from transformers import AutoProcessor
 import torch
 import numpy as np
 from mmpose.structures.bbox import (bbox_xywh2cs, bbox_cs2xywh)
@@ -35,12 +34,12 @@ class AddGaussianNoise(BaseTransform):
         return results
 
 class VitPoseDataset(Dataset):
-    def __init__(self, train_dir = None, num_keypoints = 24, augment=False):
+    def __init__(self, train_dir = None, processor = None,  num_keypoints = 24, augment=False):
         self.INPUT_SIZE = (192, 256)
         self.NUM_KPTS = 24
         self.train_dir = train_dir
         self.FEATURE_PER_KEYPOINT = 3
-        self.processor = AutoProcessor.from_pretrained("usyd-community/vitpose-base-simple", use_fast=False)
+        self.processor = processor
         self.NUM_KEYPOINTS = num_keypoints
         self.augment = augment
         self.pipeline = None

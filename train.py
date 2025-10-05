@@ -19,6 +19,7 @@ def train_model(model, criterion, train_dataloader, val_dataloader, lr_scheduler
             current_batch_size = batch["pixel_values"].shape[0]
             heatmaps_gt = batch.pop("heatmaps_gt")
             outputs = model(**batch)
+            print(f"Outputs are ====f{outputs.heatmaps.shape} and {heatmaps_gt.shape}")
             loss = criterion(outputs.heatmaps, heatmaps_gt)
             optimizer.zero_grad()
             loss.backward()

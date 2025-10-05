@@ -12,7 +12,7 @@ def get_parameter_groups(
     wd_head=1e-3,
 ):
     parameter_groups = []
-    num_layers = model.backbone.config.num_hidden_layers
+    num_layers = model.model.config.backbone_config.num_hidden_layers
 
     def get_layer_id(name):
         if "encoder.layer" in name:

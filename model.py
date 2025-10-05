@@ -4,11 +4,12 @@ from transformers import VitPoseForPoseEstimation
 
 class PoseEstimationModel(nn.Module):
     def __init__(self, num_keypoints = 24, model_ckpt = "usyd-community/vitpose-base-simple", fine_tune = True):
-        super(self).__init__()
+        super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.is_fine_tune = fine_tune
-        self.model = VitPoseForPoseEstimation.from_pretrained(str(model_ckpt), device_map=self.device, attn_implementation="sdpa")
+        self.model = VitPoseForPoseEstimation.from_pretrained(str(model_ckpt), device_map=self.device, attn_implementation="eager")
         self.num_keypoints = num_keypoints
+        self.setup_classifier_head()
     def setup_classifier_head(self):
         if self.is_fine_tune:
             if hasattr(self.model, 'head') and hasattr(self.model.head, 'conv'):
@@ -29,5 +30,5 @@ class PoseEstimationModel(nn.Module):
                     if new_conv.bias is not None:
                         nn.init.constant_(new_conv.bias[17:], 0)
             self.model.head.conv = new_conv
-    def forward(self, x): 
-        return self.model(x)
+    def forward(self, **kwargs): 
+        return self.model(**kwargs)
